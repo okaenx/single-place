@@ -1,0 +1,98 @@
+version: '3.5'
+services:
+  config-server:
+    container_name: config-server
+    build: config-server
+    ports:
+      - "1300:1300"
+
+  eureka-server:
+    container_name: eureka-server
+    restart: always
+    build: eureka-server
+    ports:
+      - "1301:1301"
+    depends_on:
+     - config-server
+
+  api-gateway:
+    container_name: api-gateway
+    restart: always
+    build: api-gateway
+    ports:
+      - "1302:1302"
+    depends_on:
+      - config-server
+      - eureka-server
+
+  #account-service:
+  #  container_name: account-service
+  #  restart: on-failure
+  #  build: account-service
+  #  ports:
+  #    - 8081:8081
+  #  depends_on:
+  #    - config-service
+  #    - registry
+  #    - postgres
+
+  #bill-service:
+  #  container_name: bill-service
+  #  restart: on-failure
+  #  build: bill-service
+  #  ports:
+  #    - 8082:8082
+  #  depends_on:
+  #    - config-service
+  #    - registry
+  #    - postgres
+
+  #deposit-service:
+  #  container_name: deposit-service
+  #  restart: on-failure
+  #  #    image: deposit-service:latest
+  #  build: deposit-service
+  #  ports:
+  #    - 9090:9090
+  #  depends_on:
+  #    - config-service
+  #    - registry
+  #    - postgres
+
+  #notification-service:
+  #  container_name: notification-service
+  #  restart: on-failure
+  #  build: notification-service
+  #  depends_on:
+  #    - config-service
+  #    - registry
+
+  rabbitmq: # login guest:guest
+    image: rabbitmq:3-management
+    hostname: rabbitmq
+    labels:
+      NAME: "rabbitmq"
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    depends_on:
+      - config-server
+      - eureka-server
+      #- account-service
+
+  postgres:
+    image: postgres
+    container_name: postgres-container
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - network
+
+networks:
+  network:
+    driver: bridge

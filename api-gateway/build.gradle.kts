@@ -9,6 +9,10 @@ version = "1.0.0"
 
 java {
 	sourceCompatibility = JavaVersion.VERSION_21
+
+	manifest {
+		attributes(mapOf("Main-Class" to "dev.regksem.gateway.APIGatewayApplication"))
+	}
 }
 
 repositories {
@@ -22,10 +26,11 @@ dependencies {
 	annotationProcessor("org.projectlombok:lombok")
 	compileOnly("org.projectlombok:lombok")
 
-	implementation("org.springframework.cloud:spring-cloud-starter-gateway")
+	implementation("org.springframework.cloud:spring-cloud-starter-netflix-zuul:2.2.10.RELEASE")
+	implementation("org.springframework.cloud:spring-cloud-starter-config")
+	implementation("org.springframework.cloud:spring-cloud-starter")
 	implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
-	//testImplementation("org.springframework.boot:spring-boot-starter-test")
-	//testImplementation("io.projectreactor:reactor-test")
+	implementation("org.springframework.cloud:spring-cloud-starter-sleuth")
 }
 
 dependencyManagement {

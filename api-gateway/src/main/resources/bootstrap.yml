@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    config:
+      uri: http://config-service:1300
+      fail-fast: true
+      password: admin
+      username: user

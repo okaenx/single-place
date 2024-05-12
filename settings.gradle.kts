@@ -8,5 +8,6 @@ rootProject.name = "single-place"
 
 include(
 	"api-gateway",
+	"config-server",
 	"eureka-server"
 )

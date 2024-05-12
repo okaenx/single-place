@@ -9,6 +9,10 @@ version = "1.0.0"
 
 java {
 	sourceCompatibility = JavaVersion.VERSION_21
+
+	manifest {
+		attributes(mapOf("Main-Class" to "dev.regksem.eureka.EurekaServerApplication"))
+	}
 }
 
 repositories {
@@ -19,7 +23,7 @@ repositories {
 extra["springCloudVersion"] = "2023.0.1"
 
 dependencies {
-	//implementation("org.springframework:spring-web")
+	implementation("org.springframework.cloud:spring-cloud-starter-config")
 	implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-server")
 }
 
